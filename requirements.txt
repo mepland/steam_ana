@@ -1,0 +1,12 @@
+mysql-connector
+pandas
+numpy
+jupyterlab
+ipywidgets
+
+# networkx
+# python_louvain
+# visJS2jupyter
+# matplotlib
+# seaborn
+# python-dateutil

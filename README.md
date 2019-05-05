@@ -21,30 +21,37 @@ pip install -r requirements.txt
 jupyter nbextension enable --py widgetsnbextension
 ```
 
-## Downloading Data
-Download `steam.sql.gz` from [steam.internet.byu.edu](http://steam.internet.byu.edu/), then extract with gunzip. Note that the download size is 18GB and the extracted size is 161GB so you'll probably need a decent workstation. Then load into MySQL:  
+## Getting the Data
+### Download and Extract
+Download `steam.sql.gz` from [steam.internet.byu.edu](http://steam.internet.byu.edu/), then extract with gunzip. Note that the download size is 18GB and the extracted size is 161GB so you'll probably need a decent workstation.
 
 ```bash
-# download and extract
 wget http://steam.phoenixteam.net/steam.sql.gz
 gunzip steam.sql.gz
+```
 
-# load into mysql
+### Setup MySQL and Load the SQL Dump
+```bash
+# setup user and database
 mysql -u root -p
+GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost' IDENTIFIED BY 'pw';
+mysql -u user -password=pw
 CREATE DATABASE steamdb; USE steamdb;
-SET autocommit=0; source steam.sql; COMMIT;
 
-# extract useful data
+# load the SQL dump
+SET autocommit=0;
+source steam.sql;
+COMMIT;
+```
 
-# https://stackoverflow.com/questions/5859391/create-a-temporary-table-in-a-select-statement-without-a-separate-create-table
-CREATE TEMPORARY TABLE IF NOT EXISTS twohours
+### Extract the Needed Data to CSV
+```bash
+# First look
+mysql -u user --password=pw --database=steamdb --execute='SELECT steamid, appid, playtime_forever FROM Games_1 WHERE playtime_forever > 120 LIMIT 50;' -q -n -B -r > test_out.tsv
 
-# first look
-SELECT steamid, appid, playtime_forever FROM GAMES_1 WHERE playtime_forever > 120 LIMIT 50;
-
-# save out values to create graph
+# save values out to create graph (top 5 games per user, each having at least 120 minutes of play time)
 # https://www.databasejournal.com/features/mysql/selecting-the-top-n-results-by-group-in-mysql.html
-# https://stackoverflow.com/questions/356578/how-to-output-mysql-query-results-in-csv-format/356605#356605
+# raw command:
 
 SELECT steamid, appid, playtime_forever
  FROM
@@ -55,10 +62,22 @@ SELECT steamid, appid, playtime_forever
                          1
                       ) AS steamid_rank,
    @current_steamid := steamid
-   FROM GAMES_1
+   FROM Games_1
    WHERE playtime_forever > 120
    ORDER BY steamid, playtime_forever DESC
  ) ranked
- WHERE steamid_rank <= 5
-INTO OUTFILE 'games1.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+ WHERE steamid_rank <= 5;
+
+# piped to tsv (avoids file system permission errors)
+mysql -u user --password=pw --database=steamdb --execute='SELECT steamid, appid, playtime_forever FROM ( SELECT steamid, appid, playtime_forever, @steamid_rank := IF(@current_steamid = steamid, @steamid_rank + 1, 1) AS steamid_rank, @current_steamid := steamid FROM Games_1 WHERE playtime_forever > 120 ORDER BY steamid, playtime_forever DESC) ranked WHERE steamid_rank <= 5' -q -n -B -r > games_1.tsv
+
+# convert tsv to csv
+mv games_1.tsv games_1.csv
+sed -i '/\t/ s//,/g' games_1.csv
+
+# get titles
+mysql -u user --password=pw --database=steamdb --execute='SELECT appid, Title FROM App_ID_Info WHERE Type = "game";' -q -n -B -r > app_title.csv && sed -i '/\t/ s//,/g' app_title.csv
+
+# get genres
+mysql -u user --password=pw --database=steamdb --execute='SELECT appid, Genre FROM Games_Genres;' -q -n -B -r > app_genres.csv && sed -i '/\t/ s//,/g' app_genres.csv
 ```

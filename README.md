@@ -71,6 +71,9 @@ SELECT steamid, appid, playtime_forever
 # piped to tsv (avoids file system permission errors)
 mysql -u user --password=pw --database=steamdb --execute='SELECT steamid, appid, playtime_forever FROM ( SELECT steamid, appid, playtime_forever, @steamid_rank := IF(@current_steamid = steamid, @steamid_rank + 1, 1) AS steamid_rank, @current_steamid := steamid FROM Games_1 WHERE playtime_forever > 120 ORDER BY steamid, playtime_forever DESC) ranked WHERE steamid_rank <= 5' -q -n -B -r > games_1.tsv
 
+# save out all player libraries to test predictions
+mysql -u user --password=pw --database=steamdb --execute='SELECT steamid, appid, playtime_forever FROM Games_1 ORDER BY steamid;' -q -n -B -r > all_players.csv
+
 # convert tsv to csv
 mv games_1.tsv games_1.csv
 sed -i '/\t/ s//,/g' games_1.csv

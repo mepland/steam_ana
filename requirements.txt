@@ -3,10 +3,9 @@ pandas
 numpy
 jupyterlab
 ipywidgets
-
-# networkx
-# python_louvain
-# visJS2jupyter
-# matplotlib
-# seaborn
-# python-dateutil
+networkx
+python_louvain
+matplotlib
+visJS2jupyter
+seaborn
+palettable

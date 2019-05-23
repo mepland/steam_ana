@@ -324,7 +324,7 @@ for i,steamid in enumerate(sample(steamids,1000)):
     appids = set(look_up_dict.get(appid, appid) for appid in df_libs.loc[df_libs['steamid']==steamid]['appid'].to_list()) # cleaned appids that this steamid owns
     for appid in appids:
         ncorrect = len(predictions[appid].intersection(appids)) # for appid, this is the number of predictions we got right, they own those predicted appids
-        if ncorrect > 3:
+        if ncorrect >= 3:
             predictions_success_num[appid] += 1
         predictions_all_den[appid] += 1
 
@@ -344,13 +344,12 @@ for appid,success in predictions_success_num.items():
 #     json.dump(predictions_acc, f, sort_keys=True, indent=2)
 
 
-# In[34]:
+# In[40]:
 
 
-from graph_helper import *
 plot_prediction_acc(predictions_acc, t_names, communities, node_to_color, output_path, fname = 'prediction_acc', acc_min=0.0, acc_max=1.0, label_xticks=False)
 plot_prediction_acc(predictions_acc, t_names, communities, node_to_color, output_path, fname = 'prediction_acc_low', acc_min=0.0, acc_max=0.25, label_xticks=True)
-plot_prediction_acc(predictions_acc, t_names, communities, node_to_color, output_path, fname = 'prediction_acc_high', acc_min=0.5, acc_max=1.0, label_xticks=True)
+plot_prediction_acc(predictions_acc, t_names, communities, node_to_color, output_path, fname = 'prediction_acc_high', acc_min=0.75, acc_max=1.0, label_xticks=True)
 
 
 # ## Draw interactive graph

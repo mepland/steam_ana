@@ -291,3 +291,85 @@ def plot_community_genre_comp(community_genre_comp, all_used_genres, m_path, fna
   if inline:
     plt.show()
   plt.close('all')
+
+def plot_prediction_acc(predictions_acc, t_names, communities, node_to_color, m_path, fname = 'prediction_acc', tag='', inline=False, acc_min=0.0, acc_max=1.0, label_xticks=True):
+  fig = plt.figure(fname)
+  fig.set_size_inches(aspect_ratio_single*vsize, vsize)
+  gs = gridspec.GridSpec(1,2, width_ratios=[5, 1])
+  ax_left = plt.subplot(gs[0])
+
+  x_axis = []
+  y_axis_values = collections.defaultdict(list)
+  community_colors = {}
+  for node in sorted(predictions_acc, key=predictions_acc.get):
+
+    community = communities[node]
+    if community not in community_colors:
+      community_colors[community] = color_str_to_tuple(node_to_color[node])
+
+    acc = predictions_acc[node]
+    if acc < acc_min or acc_max < acc:
+      continue
+    x_axis.append(t_names[node])
+    for c in set(communities.values()):
+      if c==community:
+        y_axis_values[c].append(acc)
+      else:
+        y_axis_values[c].append(0)
+
+  ind = np.arange(len(x_axis))
+  ps = []
+  community_names = []
+  for community,v in y_axis_values.items():
+    y_values = np.array(v)
+    n_members = 0
+    for c in communities.values():
+      if c==community:
+        n_members += 1
+    community_name='Community {0:d} ({1:d})'.format(community, n_members)
+
+    p = ax_left.bar(ind, y_values, width=0.4, color=community_colors[community], label= community_name)
+    ps.append(p)
+    community_names.append(community_name)
+
+  # ax_left.set_xlabel('Game')
+  ax_left.set_xticks(ind)
+  if label_xticks:
+    ax_left.set_xticklabels(x_axis, rotation='vertical')
+  else:
+    ax_left.set_xticklabels([])
+
+  ax_left.tick_params(
+    axis='x',          # changes apply to the x-axis
+    which='both',      # both major and minor ticks are affected
+    bottom=False,      # ticks along the bottom edge are off
+    top=False,         # ticks along the top edge are off
+    labelbottom=True) # labels along the bottom edge are off
+
+  ax_left.set_ylabel('Accuracy')
+  ax_left.set_ylim(0., 1.)
+
+  ax_left.xaxis.label.set_size(20)
+  ax_left.yaxis.label.set_size(20)
+
+  ax_left.xaxis.set_tick_params(labelsize=15)
+  ax_left.yaxis.set_tick_params(labelsize=15)
+
+  ax_right = plt.subplot(gs[1])
+  ax_right.axis('off')
+  ax_right.margins(0,0)
+
+  leg = ax_right.legend(ps, community_names, bbox_to_anchor=(-0.2,0.98), loc='upper left', borderaxespad=0.0,frameon=False, fontsize="x-large")
+  leg._legend_box.align = 'left'
+  leg.get_frame().set_edgecolor('none')
+  leg.get_frame().set_facecolor('none')
+
+  leg.set_title('Louvain Communities',prop={'size':'x-large','weight':'bold'})
+
+  fig.tight_layout()
+
+  os.makedirs(m_path, exist_ok=True)
+  fig.savefig('{0:s}/{1:s}{2:s}.pdf'.format(m_path, fname, tag))
+  if inline:
+    plt.show()
+  plt.close('all')

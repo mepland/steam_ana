@@ -22,6 +22,8 @@ g_names_manual = {
 205790:['Massively Multiplayer','Strategy','Free to Play'],
 207890:['Sports', 'Simulation'],
 212910:['Action'],
+35140:['Action', 'Adventure'],
+108800:['Action'],
 }
 
 t_names_manual = {
@@ -46,4 +48,6 @@ t_names_manual = {
 205790:'Dota 2 Test',
 207890:'Football Manager 2013',
 212910:'Call of Duty: Black Ops II - Zombies',
+35140:'Batman: Arkham Asylum GOTY Edition',
+108800:'Crysis 2 Maximum Edition',
 }

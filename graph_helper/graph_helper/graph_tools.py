@@ -1,6 +1,59 @@
 import pandas as pd
 import networkx as nx
 import collections
+from operator import itemgetter
+
+def clean_game_titles(t_names, g_names):
+  t_names_inverse = collections.defaultdict(list)
+  for k,v in t_names.items():
+    t_names_inverse[v].append(k)
+
+  to_merge = {}
+  for k,v in t_names_inverse.items():
+    if len(v) > 1:
+      v = sorted(v)
+      to_merge[v[0]] = v
+
+  for k,v in to_merge.items():
+    for node_to_merge in v[1:]:
+      g_names[k]+=g_names[node_to_merge]
+      del t_names[node_to_merge]
+      del g_names[node_to_merge]
+
+    g_names[k] = sorted(list(set(g_names[k])))
+
+  return to_merge, t_names, g_names
+
+def clean_game_titles_in_graph(G, to_merge, t_names, g_names):
+  for k,v in to_merge.items():
+    target_node = None
+    source_nodes = []
+    for node in v:
+      if node in nx.nodes(G):
+        if target_node is None:
+          target_node = node
+        else:
+          source_nodes.append(node)
+    if target_node is not None and len(source_nodes)>0:
+      for source_node in source_nodes:
+        G = nx.contracted_nodes(G, target_node, source_node)
+
+        if target_node not in t_names.keys() and source_node in t_names.keys():
+          t_names[target_node] = t_names[source_node]
+          g_names[target_node] = g_names[source_node]
+          del t_names[source_node]
+          del g_names[source_node]
+
+  total_weight_dict = {}
+  for node in G.nodes():
+    total_weight = 0.0
+    for edge in G.edges(node,data=True):
+      total_weight += edge[2]['weight']
+    total_weight_dict[node] = total_weight
+
+  nx.set_node_attributes(G, name='total_weight', values=total_weight_dict)
+
+  return G, list(total_weight_dict.values()), t_names, g_names
 
 def build_G(df, min_edge_weight=None, max_nedges=None, return_total_weights=False):
   G = nx.Graph()
@@ -85,7 +138,17 @@ def write_community_info(community_info, m_path, fname='community_titles'):
     for k,v in community_info.items():
       f.write('Community {0:d}:\n'.format(k))
       f.write('---------------\n')
-      for t in v['Titles']:
+      for t in sorted(v['Titles']):
         f.write('{0:s}\n'.format(t))
       f.write('\n')
   f.close()
+
+def make_predictions(G, top_k=5):
+  predictions = collections.defaultdict(set)
+  for node in nx.nodes(G):
+    edges = list(G.edges(node, data='weight'))
+    edges.sort(key=itemgetter(2),reverse=True)
+    for edge in edges[:top_k]:
+      predictions[node].add(edge[1])
+
+  return predictions

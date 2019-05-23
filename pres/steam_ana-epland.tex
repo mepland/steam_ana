@@ -53,15 +53,15 @@
   \begin{itemize}
     \item Steam is a popular video game distribution platform
 \vspace{0.2cm}
-    \item A \href{http://steam.internet.byu.edu/}{large dataset} from the API is available as a SQL dump
+    \item A \SI{150}{\giga\byte} \href{http://steam.internet.byu.edu/}{dataset} is available from the API as a SQL dump
 \vspace{0.2cm}
-    \item Take the top 5 games, with $>$ 2 hours played, per user
+    \item Extract the top 5 games per user, with $>$ 2 hours played
 \vspace{0.2cm}
-    \item Make undirected graph in Python + NetworkX with:
+    \item Make an undirected graph in Python + NetworkX with:
     \begin{itemize}
       \item Nodes $\leftrightarrow$ Game titles
       \vspace{0.1cm}
-      \item Edges $\leftrightarrow$ Games appear together in an user's library
+      \item Edges $\leftrightarrow$ Two games appeared together in an user's library
     \end{itemize}
 \vspace{0.2cm}
     \item Find communities within the graph via the\\\href{http://stacks.iop.org/1742-5468/2008/i=10/a=P10008}{Louvain method} with \href{http://github.com/taynaud/python-louvain}{python-louvain}
@@ -77,8 +77,8 @@
   \frametitle{Game Graph}
   \centering
   \includegraphics[width=0.95\textwidth,trim={5cm 3cm 0.5cm 3.7cm},clip]{../output/graph.pdf} % trim={<left> <lower> <right> <upper>}
-  \begin{textblock*}{6cm}(0.1cm,8.75cm)
-{\small (Kamada-Kawai force-directed layout)}
+  \begin{textblock*}{3.8cm}(0.28cm,9cm)
+{\tiny (Kamada-Kawai force-directed layout)}
   \end{textblock*}
 \end{frame}
 
@@ -93,16 +93,16 @@
 \begin{frame}
   \frametitle{Game Recommendations}
   \begin{itemize}
-    \item For a first attempt, find the top 5 similar games based on largest edge weight for predictions
+    \item First approach, for each game predict the top 5 similar games based on the largest edge weight
     \begin{itemize}
-      \item Similar in spirit to a $k$-NN recommender
+      \item Similar in concept to a $k$-nearest neighbor recommender
     \end{itemize}
     \vspace{0.2cm}
-    \item Check \num{1000} random users, see if we predicted $\geq 3$ games they own
+    \item Sample \num{1000} random users, see if we predicted $\geq 3$ games they own
     \vspace{0.2cm}
     \item On this metric, $\approx \SI{25}{\percent}$ of the considered games generate predictions with $> \SI{75}{\percent}$ accuracy
     \begin{itemize}
-      \item See more results in backup
+      \item For more results see backup
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -118,9 +118,9 @@
 \begin{frame}
   \frametitle{Possible Future Directions}
   \begin{itemize}
-    \item Try other recommendation systems such as those detailed in\\\href{http://arxiv.org/abs/1808.00004}{arXiv:1808.00004} or \href{http://arxiv.org/abs/1604.03147}{arXiv:1604.03147}
+    \item Try other recommendation systems such as those described in\\\href{http://arxiv.org/abs/1808.00004}{arXiv:1808.00004} or \href{http://arxiv.org/abs/1604.03147}{arXiv:1604.03147}
     \vspace{0.2cm}
-    \item Investigate user friend list data
+    \item Investigate friend list data
   \end{itemize}
 \end{frame}
 

@@ -1,0 +1,83 @@
+\documentclass[18pt,xcolor=table]{beamer} \usefonttheme[onlymath]{serif}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% usepackages
+\usepackage{amsmath,amssymb,bbm}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[protrusion=true,expansion=true]{microtype} % make text fow nice...
+\usepackage{verbatim} % verbatim text and comment environment
+\usepackage{lmodern} % allowing font sizes at arbitrary sizes
+\usepackage[separate-uncertainty,multi-part-units=single,free-standing-units,binary-units,range-phrase=--]{siunitx} % units package, see https://www.ctan.org/pkg/siunitx
+\usepackage[absolute,overlay]{textpos} % for textblock* absolute positioning
+\TPGrid{100}{100} % make our textpos grid 100 by 100 for easy positioning
+% \TPGrid[20mm,20mm]{100}{100} % default mm grid
+%\usepackage[texcoord,grid,gridunit=mm,gridcolor=red!10,subgridcolor=green!10]{eso-pic} % layout grid, mm
+%\usepackage{tcolorbox}
+%\usepackage{enumitem}
+%\usepackage{fancyvrb}
+\usepackage{moresize}
+\usepackage{ulem}
+\usepackage{listings}
+\usepackage{cancel}
+\usepackage{physics}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Include commands, style, and abbreviations
+\input{colors.tex} % my colors
+\input{beamer_style.tex} % beamer style setup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% document setup
+\title[Steam Analysis]{Analysis of Steam Gaming Data}
+% \subtitle{subtitle}
+\author[Matthew Epland]{Matthew Epland}
+% \date{\today}
+\date{May 23th, 2019}
+
+\makeatletter\hypersetup{
+    breaklinks, baseurl=http://, pdfborder=0 0 0, pdfpagemode=UseNone, pdfstartpage=1, bookmarksopen=false, bookmarksdepth=2, % to show sections and subsections
+    pdfauthor      = {Matthew Epland}, %
+%    pdftitle       = {}, % was including the subtitle as well and I wanted to shorten/tweak it....
+%    pdfsubject     = {TODo},
+%    pdfkeywords    = {TODo}
+}\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\frame{\titlepage} \addtobeamertemplate{frametitle}{}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Introduction}
+  \begin{itemize}
+    \item Steam is a popular video game distribution platform
+    \item TODO
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Conclusions and Future Work}
+  \begin{itemize}
+    \item TODO
+    \item TODO
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\backupbegin
+\section{Backup}
+\sectionpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Graph}
+  \centering
+  \includegraphics[width=0.95\textwidth]{../output/graph.pdf}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\backupend
+\end{document}

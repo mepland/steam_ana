@@ -1,0 +1,37 @@
+\makeatletter
+\@ifpackageloaded{xcolor}
+ {% true
+ }{% false
+   % \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+   \usepackage[usenames]{xcolor}
+ }
+\makeatother
+
+% Colors from https://styleguide.duke.edu/color-palette/
+
+% These are the official colors, and they cannot be modified by the program (ie changing the opacity or saturation)
+\definecolor{Duke Blue}{HTML}{001A57}
+\definecolor{Blue Devil Blue}{HTML}{0736A4}
+
+% These are the official recommendations for colors to go with the two official Duke colors. PMS is the Pantone Matching system index, so you can search the color to see what it should look like
+\definecolor{PMS Black 3}{HTML}{262626}
+\definecolor{PMS Cool Gray 11}{HTML}{666666}
+\definecolor{PMS Cool Gray 7}{HTML}{B5B5B5}
+\definecolor{PMS Cool Gray 3}{HTML}{E5E5E5}
+\definecolor{Light Gray}{HTML}{F5F5F5}
+
+% Blues
+\definecolor{PMS 294}{HTML}{003366}
+\definecolor{PMS 3015}{HTML}{235F9C}
+\definecolor{PMS 3005}{HTML}{0680CD}
+
+% Oranges
+\definecolor{PMS 166}{HTML}{D75404}
+\definecolor{PMS 1805}{HTML}{CC3300}
+% \definecolor{PMS 157}{HTML}{F09905}
+
+% Other
+\definecolor{PMS 392}{HTML}{728302} % dark green
+\definecolor{PMS 390}{HTML}{A1B70D} % light green
+\definecolor{PMS 123}{HTML}{FFD960} % light yellow
+\definecolor{PMS 2617}{HTML}{993399} % nice violet

@@ -1,0 +1,192 @@
+\usepackage{etoolbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% beamer style settings
+\mode<presentation> {
+  \usetheme{Boadilla}  
+  \setbeamercovered{invisible}
+  \setbeamertemplate{navigation symbols}{}  
+  \setbeamertemplate{frametitle}[default][center]
+  \setbeamertemplate{bibliography item}{\insertbiblabel}
+  \setbeamerfont{frametitle}{series=\bfseries,parent=structure}
+  \setbeamerfont{title}{series=\bfseries,parent=structure}
+%  \setbeamerfont{subtitle}{size=\scriptsize,series=\bfseries,parent=structure}
+  \setbeamerfont{subtitle}{size=\scriptsize,parent=structure}
+  \setbeamerfont{author}{series=\bfseries,size=\small,parent=structure}
+  \setbeamerfont{advisor}{size=\small,parent=structure}
+  \setbeamerfont{institute}{size=\small,parent=structure}
+  \setbeamerfont{date}{size=\scriptsize,parent=structure}
+  \setbeamerfont{footline}{size=\tiny,parent=structure}
+  \setbeamercolor{normal text}{bg=white,fg=PMS Black 3}
+  \setbeamercolor{structure}{fg=Blue Devil Blue}
+  \setbeamercolor{alerted text}{fg=red!85!black}
+  \setbeamercolor{item projected}{use=item,fg=black,bg=item.fg!35}
+  \setbeamercolor*{palette primary}{use=structure,fg=white, bg=Blue Devil Blue}
+  \setbeamercolor*{palette secondary}{use=structure,bg=Duke Blue,fg=white}
+  % \setbeamercolor*{framesubtitle}{fg=Light Gray}
+  \setbeamercolor*{framesubtitle}{fg=structure}
+  \setbeamercolor*{block title}{parent=structure,fg=black,bg=Blue Devil Blue}
+  \setbeamercolor*{block body}{fg=black,bg=PMS Black 3}
+  \setbeamercolor*{block title alerted}{parent=alerted text,bg=black!15}
+  \setbeamercolor*{block title example}{parent=example text,bg=black!15}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% citation and href links auto-color
+\let\oldcite=\cite                                                              
+\renewcommand{\cite}[1]{\textcolor{Blue Devil Blue}{\oldcite{#1}}}
+
+\let\oldhref=\href                                                              
+\renewcommand{\href}[2]{\textcolor{Blue Devil Blue}{\oldhref{#1}{#2}}}
+
+\let\oldurl=\url                                                              
+\renewcommand{\url}[2]{\textcolor{Blue Devil Blue}{\oldurl{#1}{#2}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% to automatically handle backup slide numbering
+% see http://tex.stackexchange.com/questions/70448/dont-count-backup-slides
+\newcommand{\backupbegin}{
+   \newcounter{finalframe}
+   \setcounter{finalframe}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \setcounter{framenumber}{\value{finalframe}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Change itemize symbols, see below and 12.1 of beamer manual
+% http://tex.stackexchange.com/questions/11168/change-bullet-style-formatting-in-beamer 
+% http://mirrors.rit.edu/CTAN/macros/latex/contrib/beamer/doc/beameruserguide.pdf
+
+%\setbeamertemplate{itemize items}[triangle] % Default
+\setbeamertemplate{itemize items}[circle]
+%\setbeamertemplate{itemize items}[square]
+%\setbeamertemplate{itemize items}[ball]
+
+% Can't really change subitems, parent is too strong... come back eventually
+%\setbeamertemplate{itemize subitems}[triangle] % Default
+%\setbeamertemplate{itemize subitems}[circle]
+%\setbeamertemplate{itemize subitems}[square]
+%\setbeamertemplate{itemize subitems}[ball]
+
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{enumerate subitems}[default]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% change how section numbers work in the toc
+
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tikz centered section page
+
+\usepackage{tikz}
+
+\setbeamertemplate{section page}
+{
+\begin{tikzpicture}[overlay, remember picture]
+  \node[anchor=center] at (current page.center){ {\usebeamerfont{section title}\usebeamercolor[fg]{structure}{\insertsection}} };
+\end{tikzpicture}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% customized title page
+
+\makeatletter
+\let\insertadvisor\relax
+\newcommand\advisortitle{Advisor}
+\mode<all>
+{
+  \newcommand\advisor[1]{\def\insertadvisor{#1}}
+}
+
+\defbeamertemplate*{title page}{mydefault}[1][]
+{
+  \vbox{}
+  \vfill
+  \begingroup
+    \centering
+
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty\relax%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%
+    \end{beamercolorbox}%
+
+    \vskip0.8em\par
+
+    \begin{beamercolorbox}[sep=0pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+
+    \vskip0.8em\par
+
+    \ifx\insertadvisor\relax\relax\else
+    \begin{beamercolorbox}[sep=0pt,center,#1]{advisor}
+      \usebeamerfont{advisor}\advisortitle:~\insertadvisor
+    \end{beamercolorbox}
+    \fi
+
+    \begin{beamercolorbox}[sep=0pt,center,#1]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+
+    \begin{beamercolorbox}[sep=0pt,center,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip0.5em
+
+  \endgroup
+  \vfill
+
+%  \begin{textblock}{90}[0.5,0.5](50,82) % {width}[hanchor, vanchor](hpos, vpos)
+%  \end{textblock}
+
+
+}
+\setbeamertemplate{title page}[mydefault][colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% footline style
+
+\makeatletter
+\setbeamertemplate{footline}{
+  \leavevmode
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,center]{palette primary}%
+      
+    \begin{columns}
+      \column{.25\textwidth}\centering
+        \usebeamerfont{author in head/foot}\insertshortauthor\hspace*{2em}%
+      \column{.5\textwidth}\centering
+        \usebeamerfont{title in head/foot}\insertshorttitle%
+      \column{.25\textwidth}\centering
+        \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}%
+        \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}%
+    \end{columns}
+
+    \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% mdframed, beamerlikebox text boxes
+
+% now that we have the colors...
+\usepackage[framemethod=tikz]{mdframed}
+\mdfdefinestyle{beamerlikebox}{
+leftmargin=0cm,
+rightmargin=0cm,
+shadow=false,
+roundcorner=0pt,
+backgroundcolor=white,
+linecolor=PMS Black 3,
+}

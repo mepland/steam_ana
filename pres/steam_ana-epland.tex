@@ -8,7 +8,7 @@
 \usepackage[protrusion=true,expansion=true]{microtype} % make text fow nice...
 \usepackage{verbatim} % verbatim text and comment environment
 \usepackage{lmodern} % allowing font sizes at arbitrary sizes
-\usepackage[separate-uncertainty,multi-part-units=single,free-standing-units,binary-units,range-phrase=--]{siunitx} % units package, see https://www.ctan.org/pkg/siunitx
+\usepackage[separate-uncertainty,multi-part-units=single,free-standing-units,binary-units,range-phrase=--]{siunitx} % units package, see http://www.ctan.org/pkg/siunitx
 \usepackage[absolute,overlay]{textpos} % for textblock* absolute positioning
 \TPGrid{100}{100} % make our textpos grid 100 by 100 for easy positioning
 % \TPGrid[20mm,20mm]{100}{100} % default mm grid
@@ -29,9 +29,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % document setup
-\title[Steam Analysis]{Analysis of Steam Gaming Data}
+\title[Preliminary Steam Analysis]{Preliminary Analysis of Steam Gaming Data}
 % \subtitle{subtitle}
-\author[Matthew Epland]{Matthew Epland}
+\author[Epland]{Matthew Epland, Ph.D.}
 % \date{\today}
 \date{May 23th, 2019}
 
@@ -52,16 +52,75 @@
   \frametitle{Introduction}
   \begin{itemize}
     \item Steam is a popular video game distribution platform
-    \item TODO
+\vspace{0.2cm}
+    \item A \href{http://steam.internet.byu.edu/}{large dataset} from the API is available as a SQL dump
+\vspace{0.2cm}
+    \item Take the top 5 games, with $>$ 2 hours played, per user
+\vspace{0.2cm}
+    \item Make undirected graph in Python + NetworkX with:
+    \begin{itemize}
+      \item Nodes $\leftrightarrow$ Game titles
+      \vspace{0.1cm}
+      \item Edges $\leftrightarrow$ Games appear together in an user's library
+    \end{itemize}
+\vspace{0.2cm}
+    \item Find communities within the graph via the\\\href{http://stacks.iop.org/1742-5468/2008/i=10/a=P10008}{Louvain method} with \href{http://github.com/taynaud/python-louvain}{python-louvain}
+  \end{itemize}
+\vspace{0.23cm}
+  \centering
+  \includegraphics[width=0.15\textwidth]{steam_logo.png}
+  \vspace{-0.3cm}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Game Graph}
+  \centering
+  \includegraphics[width=0.95\textwidth,trim={5cm 3cm 0.5cm 3.7cm},clip]{../output/graph.pdf} % trim={<left> <lower> <right> <upper>}
+  \begin{textblock*}{6cm}(0.1cm,8.75cm)
+{\small (Kamada-Kawai force-directed layout)}
+  \end{textblock*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Community Genre Composition}
+  \centering
+  \includegraphics[width=0.95\textwidth]{../output/genre_comps.pdf}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Game Recommendations}
+  \begin{itemize}
+    \item For a first attempt, find the top 5 similar games based on largest edge weight for predictions
+    \begin{itemize}
+      \item Similar in spirit to a $k$-NN recommender
+    \end{itemize}
+    \vspace{0.2cm}
+    \item Check \num{1000} random users, see if we predicted $\geq 3$ games they own
+    \vspace{0.2cm}
+    \item On this metric, $\approx \SI{25}{\percent}$ of the considered games generate predictions with $> \SI{75}{\percent}$ accuracy
+    \begin{itemize}
+      \item See more results in backup
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-  \frametitle{Conclusions and Future Work}
+  \frametitle{Prediction Accuracy}
+  \centering
+  \includegraphics[width=0.9\textwidth]{../output/prediction_acc_high.pdf}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Possible Future Directions}
   \begin{itemize}
-    \item TODO
-    \item TODO
+    \item Try other recommendation systems such as those detailed in\\\href{http://arxiv.org/abs/1808.00004}{arXiv:1808.00004} or \href{http://arxiv.org/abs/1604.03147}{arXiv:1604.03147}
+    \vspace{0.2cm}
+    \item Investigate user friend list data
   \end{itemize}
 \end{frame}
 
@@ -73,9 +132,341 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-  \frametitle{Graph}
+  \frametitle{Prediction Accuracy (All)}
   \centering
-  \includegraphics[width=0.95\textwidth]{../output/graph.pdf}
+  \includegraphics[width=0.9\textwidth]{../output/prediction_acc.pdf}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Prediction Accuracy (Low)}
+  \centering
+  \includegraphics[width=0.9\textwidth]{../output/prediction_acc_low.pdf}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+  \frametitle{Community Members: 0}
+  \centering
+{\tiny
+\begin{columns}[T]
+\column{.5\textwidth}
+\begin{lstlisting}
+Ace of Spades: Battle Builder
+Aliens vs. Predator
+Arma 2
+Arma 2: Operation Arrowhead
+Arma 3
+BRINK
+Call of Duty: Black Ops II - Zombies
+Call of Duty 4: Modern Warfare
+Call of Duty: Black Ops
+Call of Duty: Black Ops II
+Call of Duty: Modern Warfare 2
+Call of Duty: Modern Warfare 3
+Chivalry: Medieval Warfare
+Counter-Strike
+Counter-Strike: Condition Zero
+Counter-Strike: Global Offensive
+Counter-Strike: Source
+Day of Defeat
+Day of Defeat: Source
+Dota 2
+Dota 2 Test
+Garry's Mod
+Half-Life 2: Deathmatch
+Half-Life 2: Lost Coast
+Homefront
+Infestation: Survivor Stories Classic
+Killing Floor
+Natural Selection 2
+PAYDAY The Heist
+Red Orchestra 2: Heroes of Stalingrad with Rising Storm
+Sniper Elite V2
+Sniper: Ghost Warrior
+\end{lstlisting}
+\end{columns}
+} % end tiny
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+  \frametitle{Community Members: 1}
+  \centering
+{\fontsize{5}{4}\selectfont
+\begin{columns}[T]
+\column{.32\textwidth}
+\begin{lstlisting}
+Age of Empires II HD
+Amnesia: The Dark Descent
+Antichamber
+Assassin's Creed 2 Deluxe
+Assassin's Creed Revelations
+Assassin's Creed: Director's Cut
+Assassin’s Creed Brotherhood
+Assassin’s Creed III
+Atom Zombie Smasher
+AudioSurf
+Batman: Arkham City - GOTY
+Battlefield 2: Complete Collection
+Beat Hazard
+BioShock 2
+Burnout Paradise: The Ultimate Box
+Call of Duty: World at War
+Cave Story+
+Command & Conquer: Red Alert 3
+Crysis
+Crysis 2 Maximum
+Crysis Warhead
+Dead Rising 2
+Dead Space
+Dead Space 2
+Deus Ex: GOTY
+DiRT 2
+DiRT 3
+Duke Nukem Forever
+\end{lstlisting}
+\column{.32\textwidth}
+\begin{lstlisting}
+F.E.A.R.
+F.E.A.R. 2: Project Origin
+F.E.A.R. 3
+Fallout 3
+From Dust
+Frozen Synapse
+GRID
+Global Agenda
+Grand Theft Auto: San Andreas
+Half-Life
+Half-Life 2
+Half-Life 2: Episode One
+Half-Life 2: Episode Two
+Half-Life: Blue Shift
+Half-Life: Opposing Force
+Half-Life: Source
+Hitman: Blood Money
+Kerbal Space Program
+Left 4 Dead
+Left 4 Dead 2
+Little Inferno
+Machinarium
+Mirror's Edge
+Monday Night Combat
+Need For Speed: Hot Pursuit
+Poker Night 2
+Poker Night at the Inventory
+Portal
+Portal 2
+\end{lstlisting}
+\column{.32\textwidth}
+\begin{lstlisting}
+Prototype
+Red Faction Guerrilla
+Red Faction: Armageddon
+Resident Evil 5/ Biohazard 5
+S.T.A.L.K.E.R.: Call of Pripyat
+S.T.A.L.K.E.R.: Shadow of Chernobyl
+STAR WARS Battlefront II
+Saints Row 2
+Scribblenauts Unlimited
+Section 8: Prejudice
+Serious Sam 3: BFE
+Serious Sam HD: The First Encounter
+Serious Sam HD: The Second Encounter
+Sid Meier's Civilization IV
+SimCity 4 Deluxe
+Sonic Generations
+Spec Ops: The Line
+Team Fortress 2
+The Darkness II
+The Secret of Monkey Island: SE
+The Sims 3
+Titan Quest
+Tom Clancy's Rainbow Six Vegas 2
+Tom Clancy's Splinter Cell: Conviction
+Unreal Tournament 3 Black
+VVVVVV
+World of Goo
+Worms Reloaded
+\end{lstlisting}
+\end{columns}
+} % end tiny
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+  \frametitle{Community Members: 2}
+  \centering
+{\tiny
+\begin{columns}[T]
+\column{.5\textwidth}
+\begin{lstlisting}
+Alan Wake
+Batman: Arkham City
+Battlefield: Bad Company 2
+BioShock Infinite
+Dead Island Riptide
+Dead Island: GOTY
+Dishonored
+Far Cry 3
+Far Cry 2: Fortune's Edition
+Grand Theft Auto IV
+Grand Theft Auto: Episodes from Liberty City
+Hitman: Absolution
+Just Cause 2
+L.A. Noire
+Mafia II
+Max Payne 3
+Metro 2033
+Metro: Last Light
+RAGE
+Saints Row: The Third
+Sleeping Dogs
+The Walking Dead
+The Witcher 2: Assassins of Kings Enhanced Edition
+Tomb Raider
+\end{lstlisting}
+\end{columns}
+} % end tiny
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+  \frametitle{Community Members: 3}
+  \centering
+{\fontsize{5}{4}\selectfont
+\begin{columns}[T]
+\column{.32\textwidth}
+\begin{lstlisting}
+Age of Empires III: Complete Collection
+Anno 2070
+Awesomenauts
+Bastion
+Batman: Arkham Asylum GOTY
+BioShock
+Borderlands
+Borderlands 2
+Braid
+Castle Crashers
+Civilization IV: Beyond the Sword
+DARK SOULS: Prepare To Die
+Darksiders II
+Darksiders
+Defense Grid: The Awakening
+Deus Ex: Human Revolution
+Deus Ex: Human Revolution-Missing Link
+Don't Starve
+Dragon Age II
+Dragon Age: Origins
+Dragon Age: Origins - Ultimate Edition
+Dungeon Defenders
+\end{lstlisting}
+\column{.32\textwidth}
+\begin{lstlisting}
+Dungeon Siege III
+Dungeons of Dredmor
+Endless Space - Emperor Edition
+FTL: Faster Than Light
+Fable III
+Fallout 3: GOTY
+Fallout: New Vegas
+Hotline Miami
+Kingdoms of Amalur: Reckoning
+LIMBO
+Legend of Grimrock
+Lord of the Rings: War in the North
+Magic: The Gathering ... 2012
+Magic: The Gathering ... 2013
+Magicka
+Mark of the Ninja
+Mass Effect
+Mass Effect 2
+Might & Magic: Heroes VI
+Neverwinter Nights 2: Platinum
+Orcs Must Die!
+Orcs Must Die! 2
+Plants vs. Zombies GOTY
+\end{lstlisting}
+\column{.32\textwidth}
+\begin{lstlisting}
+Psychonauts
+RIFT
+Recettear: An Item Shop's Tale
+Risen 2: Dark Waters
+STAR WARS - Knights of the Old Republic
+Sanctum
+Sid Meier's Civilization V
+Space Pirates and Zombies
+Stronghold 3 Gold
+Super Meat Boy
+Terraria
+The Binding of Isaac
+The Elder Scrolls III: Morrowind GOTY
+The Elder Scrolls IV: Oblivion GOTY
+The Elder Scrolls V: Skyrim
+The Witcher: Enhanced Director's Cut
+Titan Quest - Immortal Throne
+Torchlight
+Torchlight II
+Trine 2: Complete Story
+Trine Enchanted Edition
+Tropico 4: Steam SE
+XCOM: Enemy Unknown
+\end{lstlisting}
+\end{columns}
+} % end tiny
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+  \frametitle{Community Members: 4}
+  \centering
+{\tiny
+\begin{columns}[T]
+\column{.5\textwidth}
+\begin{lstlisting}
+Company of Heroes
+Company of Heroes: Opposing Fronts
+Company of Heroes: Tales of Valor
+Crusader Kings II
+Empire: Total War
+Medieval II: Total War
+Mount & Blade
+Mount & Blade: Warband
+Mount & Blade: With Fire & Sword
+Napoleon: Total War
+R.U.S.E.
+Rome: Total War - Collection
+Sins of a Solar Empire: Rebellion
+Supreme Commander 2
+Total War: SHOGUN 2
+Wargame: European Escalation
+Warhammer 40,000: Dawn of War II: Retribution
+Warhammer 40,000: Space Marine
+Warhammer 40,000: Dawn of War - Soulstorm
+Warhammer 40,000: Dawn of War II Chaos Rising
+Warhammer 40,000: Dawn of War II
+\end{lstlisting}
+\end{columns}
+} % end tiny
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+  \frametitle{Community Members: 5}
+  \centering
+{\tiny
+\begin{columns}[T]
+\column{.5\textwidth}
+\begin{lstlisting}
+Football Manager 2009
+Football Manager 2010
+Football Manager 2011
+Football Manager 2012
+Football Manager 2013
+\end{lstlisting}
+\end{columns}
+} % end tiny
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

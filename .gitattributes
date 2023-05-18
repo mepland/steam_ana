@@ -1,0 +1,5 @@
+# ignore all html in diffs and github languages stats
+*.html linguist-generated=true
+# ignore specific .py files linked to jupyter notebooks in github languages stats
+notebooks/old/steam_ana.py linguist-documentation=true
+notebooks/steam_ana2.py linguist-documentation=true
